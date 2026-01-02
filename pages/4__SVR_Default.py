@@ -72,10 +72,9 @@ if train_btn and not st.session_state.is_training_default:
 if st.session_state.is_training_default:
     with st.spinner("🔄 Training SVR..."):
         results = svr_default(
-            data_dict['X_train_scaled'], data_dict['y_train_scaled'],
-            data_dict['X_test_scaled'], data_dict['y_test_scaled'],
-            scaler_y=data_dict['scaler_y']
-        )
+    data_dict['X_train'], data_dict['y_train'],
+    data_dict['X_test'], data_dict['y_test']
+)
         st.session_state.default_results = results
         st.session_state.is_training_default = False
     st.success("✅ Training selesai!")

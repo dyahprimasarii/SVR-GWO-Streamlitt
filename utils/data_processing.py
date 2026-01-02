@@ -93,13 +93,12 @@ def _parse_date_flexible(date_series):
 
 
 def split_and_scale_data(X, y, test_size=0.1):
-    """Split train/test dan normalisasi dengan StandardScaler."""
-    # Split tanpa shuffle untuk time series
+    # Split tanpa shuffle
     X_train, X_test, y_train, y_test = train_test_split(
         X, y, test_size=test_size, shuffle=False
     )
     
-    # Normalisasi
+    # Normalisasi HANYA untuk GWO
     scaler_X = StandardScaler()
     scaler_y = StandardScaler()
     
@@ -109,20 +108,24 @@ def split_and_scale_data(X, y, test_size=0.1):
     y_test_scaled = scaler_y.transform(y_test.reshape(-1, 1))
     
     return {
+        # DATA ASLI (tanpa normalisasi) - untuk SVR Default
         'X_train': X_train,
         'X_test': X_test,
         'y_train': y_train,
         'y_test': y_test,
+        
+        # DATA NORMALIZED (untuk GWO)
         'X_train_scaled': X_train_scaled,
         'X_test_scaled': X_test_scaled,
         'y_train_scaled': y_train_scaled,
         'y_test_scaled': y_test_scaled,
+        
+        # Scaler
         'scaler_X': scaler_X,
         'scaler_y': scaler_y,
         'train_size': len(X_train),
         'test_size': len(X_test)
     }
-
 
 # =============================================================================
 # STATISTIK

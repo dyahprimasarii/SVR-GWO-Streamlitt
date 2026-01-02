@@ -203,6 +203,6 @@ with st.sidebar:
 
 st.markdown("""
 <div style="text-align: center; color: #888; padding: 2rem;">
-    <p>SVR-GWO Stock Price Prediction | 2025</p>
+    <p>SVR-GWO Stock Price Prediction | 2026</p>
 </div>
 """, unsafe_allow_html=True)

@@ -38,12 +38,8 @@ def calculate_metrics(y_train, y_train_pred, y_test, y_test_pred):
 # SVR DEFAULT
 # =============================================================================
 
-def svr_default(X_train, y_train, X_test, y_test, scaler_y=None, 
+def svr_default(X_train, y_train, X_test, y_test, 
                 C=1.0, epsilon=0.1, gamma='scale'):
-    """
-    SVR dengan parameter default.
-    Jika scaler_y diberikan, hasil akan di-inverse transform.
-    """
     # Flatten y jika berbentuk 2D
     y_train_flat = _flatten(y_train)
     y_test_flat = _flatten(y_test)
@@ -54,17 +50,9 @@ def svr_default(X_train, y_train, X_test, y_test, scaler_y=None,
     model.fit(X_train, y_train_flat)
     training_time = time.time() - start
     
-    # Prediksi
+    # Prediksi (TIDAK ADA INVERSE TRANSFORM)
     y_train_pred = model.predict(X_train)
     y_test_pred = model.predict(X_test)
-    
-    # Inverse transform jika scaler tersedia
-    if scaler_y:
-        y_train_pred, y_test_pred, y_train_actual, y_test_actual = _inverse_all(
-            scaler_y, y_train_pred, y_test_pred, y_train_flat, y_test_flat
-        )
-    else:
-        y_train_actual, y_test_actual = y_train_flat, y_test_flat
     
     # Hitung gamma aktual
     actual_gamma = 1 / (X_train.shape[1] * X_train.var()) if gamma == 'scale' else gamma
@@ -73,10 +61,12 @@ def svr_default(X_train, y_train, X_test, y_test, scaler_y=None,
         'model': model,
         'params': {'C': C, 'epsilon': epsilon, 'gamma': gamma, 'actual_gamma': actual_gamma},
         'predictions': {
-            'train': y_train_pred, 'test': y_test_pred,
-            'train_actual': y_train_actual, 'test_actual': y_test_actual
+            'train': y_train_pred, 
+            'test': y_test_pred,
+            'train_actual': y_train_flat, 
+            'test_actual': y_test_flat
         },
-        'metrics': calculate_metrics(y_train_actual, y_train_pred, y_test_actual, y_test_pred),
+        'metrics': calculate_metrics(y_train_flat, y_train_pred, y_test_flat, y_test_pred),
         'model_info': {
             'n_support_vectors': len(model.support_),
             'bias': model.intercept_[0],
